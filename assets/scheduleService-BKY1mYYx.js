@@ -1,0 +1,1 @@
+const a=async(e,n)=>[],t=async e=>null,c=async(e=4)=>[],r=async e=>{throw new Error("Supabase not configured")},s=async(e,n)=>{throw new Error("Supabase not configured")},o=async e=>{throw new Error("Supabase not configured")};export{a,t as b,r as c,o as d,c as g,s as u};
