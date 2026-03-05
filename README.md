@@ -94,7 +94,7 @@ const Books = lazy(() => import('../pages/Books'));
 | PortOne 결제 | 카드결제 (아임포트) |
 | 테마 시스템 | 다크/라이트/자동 + 5색 컬러 테마 |
 | 다국어 | 한국어/영어 전환 |
-| 장바구니 | localStorage 기반 장바구니 |
+| 장바구니 | sessionStorage 기반 장바구니 |
 | 토스트 알림 | 전역 알림 시스템 |
 
 ## 환경변수

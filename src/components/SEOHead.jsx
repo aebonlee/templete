@@ -1,9 +1,10 @@
 import { useLanguage } from '../contexts/LanguageContext';
+import site from '../config/site';
 
 const SEOHead = ({ title, description, path = '', ogImage, noindex = false }) => {
-  const SITE = 'DreamIT Biz | 드림아이티비즈';
-  const BASE = 'https://www.dreamitbiz.com';
-  const DEFAULT_DESC = '웹개발, 웹호스팅, 디자인, 기업컨설팅, 기업 맞춤 강의, 출판사업을 제공하는 IT 정보통신 전문 기업';
+  const SITE = `${site.name} | ${site.nameKo}`;
+  const BASE = site.url;
+  const DEFAULT_DESC = site.description;
   const fullTitle = title ? `${title} | ${SITE}` : SITE;
   const desc = description || DEFAULT_DESC;
   const image = ogImage || `${BASE}/assets/images/og-default.png`;
