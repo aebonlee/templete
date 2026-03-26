@@ -62,6 +62,7 @@ const Cart = () => {
                         <button
                           className="qty-btn"
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          disabled={item.quantity >= 99}
                         >
                           +
                         </button>

@@ -5,6 +5,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Supabase client - initialized only when env vars are set
 let supabase = null;
+let _memoryOrders = [];
 
 const getSupabase = () => {
   if (!supabase && supabaseUrl && supabaseAnonKey) {
@@ -211,8 +212,5 @@ export const getOrdersByUser = async (userId) => {
   }
   return data || [];
 };
-
-/** In-memory fallback store (Supabase 미설정 시 dev/demo용) */
-let _memoryOrders = [];
 
 export default getSupabase;
