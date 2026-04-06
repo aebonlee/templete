@@ -20,11 +20,11 @@ const Footer = (): ReactElement => {
             </h3>
             <p>{t('footer.tagline')}</p>
             <div className="company-info">
-              <p><strong>드림아이티비즈(DreamIT Biz)</strong></p>
-              <p>대표이사: 이애본</p>
-              <p>사업자등록번호: 601-45-20154</p>
-              <p>통신판매신고번호: 제2024-수원팔달-0584호</p>
-              <p>출판사 신고번호: 제2026-000026호</p>
+              <p><strong>{site.company.name}</strong></p>
+              <p>대표이사: {site.company.ceo}</p>
+              <p>사업자등록번호: {site.company.bizNumber}</p>
+              {site.company.salesNumber && <p>통신판매신고번호: {site.company.salesNumber}</p>}
+              {site.company.publisherNumber && <p>출판사 신고번호: {site.company.publisherNumber}</p>}
             </div>
           </div>
           <div className="footer-links">
@@ -39,11 +39,11 @@ const Footer = (): ReactElement => {
           </div>
           <div className="footer-contact">
             <h4>{t('footer.contact')}</h4>
-            <p>경기도 수원시 팔달구 매산로 45, 419호</p>
-            <p>aebon@dreamitbiz.com</p>
-            <p>010-3700-0629</p>
-            <p>카카오톡: aebon</p>
-            <p className="business-hours">평일: 09:00 ~ 18:00</p>
+            <p>{site.company.address}</p>
+            <p>{site.company.email}</p>
+            <p>{site.company.phone}</p>
+            {site.company.kakao && <p>카카오톡: {site.company.kakao}</p>}
+            {site.company.businessHours && <p className="business-hours">{site.company.businessHours}</p>}
 
             <div className="footer-family">
               <select

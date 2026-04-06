@@ -5,7 +5,11 @@ import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import PublicLayout from './layouts/PublicLayout';
-import type { ReactElement } from 'react';
+import site from './config/site';
+import type { ReactElement, ReactNode } from 'react';
+
+const ShopWrapper = ({ children }: { children: ReactNode }): ReactElement =>
+  site.features.shop ? <CartProvider>{children}</CartProvider> : <>{children}</>;
 
 function App(): ReactElement {
   return (
@@ -13,7 +17,7 @@ function App(): ReactElement {
       <LanguageProvider>
         <AuthProvider>
           <ToastProvider>
-            <CartProvider>
+            <ShopWrapper>
               <Router>
                 <div className="App">
                   <Routes>
@@ -21,7 +25,7 @@ function App(): ReactElement {
                   </Routes>
                 </div>
               </Router>
-            </CartProvider>
+            </ShopWrapper>
           </ToastProvider>
         </AuthProvider>
       </LanguageProvider>

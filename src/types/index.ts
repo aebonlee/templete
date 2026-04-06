@@ -180,14 +180,45 @@ export interface FamilySite {
   url: string;
 }
 
+export interface ColorOption {
+  name: ColorTheme;
+  color: string;
+}
+
+export interface CompanyInfo {
+  name: string;
+  ceo: string;
+  bizNumber: string;
+  salesNumber?: string;
+  publisherNumber?: string;
+  address: string;
+  email: string;
+  phone: string;
+  kakao?: string;
+  businessHours?: string;
+}
+
+export interface SiteFeatures {
+  shop: boolean;
+  community: boolean;
+  search: boolean;
+  auth: boolean;
+  license: boolean;
+}
+
 export interface SiteConfig {
+  id: string;
   name: string;
   nameKo: string;
   description: string;
   url: string;
+  dbPrefix: string;
   parentSite: { name: string; url: string };
   brand: { parts: BrandPart[] };
   themeColor: string;
+  company: CompanyInfo;
+  features: SiteFeatures;
+  colors: ColorOption[];
   menuItems: MenuItem[];
   footerLinks: { path: string; labelKey: string }[];
   familySites: FamilySite[];

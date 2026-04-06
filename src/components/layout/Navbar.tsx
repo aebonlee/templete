@@ -6,20 +6,7 @@ import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import SearchModal from '../SearchModal';
 import site from '../../config/site';
-import type { ColorTheme, MenuItem } from '../../types';
-
-interface ColorOption {
-  name: ColorTheme;
-  color: string;
-}
-
-const COLOR_OPTIONS: ColorOption[] = [
-  { name: 'blue', color: '#0046C8' },
-  { name: 'red', color: '#C8102E' },
-  { name: 'green', color: '#00855A' },
-  { name: 'purple', color: '#8B1AC8' },
-  { name: 'orange', color: '#C87200' },
-];
+import type { MenuItem } from '../../types';
 
 interface ResolvedMenuItem extends MenuItem {
   label: string;
@@ -140,20 +127,24 @@ const Navbar = (): ReactElement => {
           </ul>
 
           <div className="nav-actions">
-            <button className="nav-search-btn" onClick={() => setShowSearch(true)} aria-label="Search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </button>
-            <Link to="/cart" className="cart-icon-link" aria-label="Cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="cart-icon-svg">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </svg>
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </Link>
+            {site.features.search && (
+              <button className="nav-search-btn" onClick={() => setShowSearch(true)} aria-label="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+            )}
+            {site.features.shop && (
+              <Link to="/cart" className="cart-icon-link" aria-label="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="cart-icon-svg">
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+              </Link>
+            )}
             <button className="lang-switcher" onClick={toggleLanguage} aria-label={language === 'ko' ? 'Switch to English' : '한국어로 전환'}>
               {language === 'ko' ? 'EN' : 'KR'}
             </button>
@@ -176,7 +167,7 @@ const Navbar = (): ReactElement => {
                   <div className="color-picker-overlay" onClick={() => setShowColorPicker(false)} />
                   <div className="color-picker-tooltip">
                     <div className="color-picker-arrow" />
-                    {COLOR_OPTIONS.map((c) => (
+                    {site.colors.map((c) => (
                       <button
                         key={c.name}
                         className={`color-dot${colorTheme === c.name ? ' active' : ''}`}
@@ -271,7 +262,7 @@ const Navbar = (): ReactElement => {
           </div>
         </div>
       </div>
-      <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
+      {site.features.search && <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />}
     </nav>
   );
 };

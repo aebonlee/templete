@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactElement } from 'react';
 import type { CartItem, Product } from '../types';
+import site from '../config/site';
 
 interface CartContextValue {
   cartItems: CartItem[];
@@ -13,7 +14,7 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const STORAGE_KEY = 'dreamitbiz_cart';
+const STORAGE_KEY = `${site.id}_cart`;
 
 const loadCart = (): CartItem[] => {
   try {
@@ -85,10 +86,18 @@ export const CartProvider = ({ children }: CartProviderProps): ReactElement => {
   );
 };
 
+const EMPTY_CART: CartContextValue = {
+  cartItems: [],
+  cartTotal: 0,
+  cartCount: 0,
+  addItem: () => {},
+  removeItem: () => {},
+  updateQuantity: () => {},
+  clearCart: () => {},
+};
+
 export const useCart = (): CartContextValue => {
   const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within CartProvider');
-  }
-  return context;
+  // CartProvider가 없으면 (features.shop === false) 빈 카트 반환
+  return context ?? EMPTY_CART;
 };

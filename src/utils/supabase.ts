@@ -1,8 +1,15 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import type { OrderData, Order, PaymentStatus } from '../types';
+import site from '../config/site';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+/** Supabase 테이블명 (site.dbPrefix 기반) */
+export const TABLES = {
+  orders: `${site.dbPrefix}orders`,
+  order_items: `${site.dbPrefix}order_items`,
+} as const;
 
 // Supabase client - initialized only when env vars are set
 let supabase: SupabaseClient | null = null;
@@ -52,7 +59,7 @@ export const createOrder = async (orderData: OrderData): Promise<Order> => {
   if (orderData.user_id) orderPayload.user_id = orderData.user_id;
 
   const { data: order, error: orderError } = await client
-    .from('orders')
+    .from(TABLES.orders)
     .insert(orderPayload)
     .select()
     .single();
@@ -62,7 +69,7 @@ export const createOrder = async (orderData: OrderData): Promise<Order> => {
   // Insert order items
   if (orderData.items && orderData.items.length > 0) {
     const { error: itemsError } = await client
-      .from('order_items')
+      .from(TABLES.order_items)
       .insert(
         orderData.items.map(item => ({
           order_id: order.id,
@@ -91,7 +98,7 @@ export const getOrderByNumber = async (orderNumber: string): Promise<Order | nul
   }
 
   const { data: orders, error } = await client
-    .from('orders')
+    .from(TABLES.orders)
     .select('*')
     .eq('order_number', orderNumber)
     .limit(1);
@@ -103,7 +110,7 @@ export const getOrderByNumber = async (orderNumber: string): Promise<Order | nul
 
   // Fetch order items
   const { data: items } = await client
-    .from('order_items')
+    .from(TABLES.order_items)
     .select('*')
     .eq('order_id', order.id);
 
@@ -150,7 +157,7 @@ export const updateOrderStatus = async (
 
   try {
     const { data, error } = await client
-      .from('orders')
+      .from(TABLES.orders)
       .update({ ...updatePayload, ...extras })
       .eq('id', orderId)
       .select();
@@ -160,7 +167,7 @@ export const updateOrderStatus = async (
   } catch {
     // Fallback: update without optional columns
     const { data, error } = await client
-      .from('orders')
+      .from(TABLES.orders)
       .update(updatePayload)
       .eq('id', orderId)
       .select();
@@ -205,9 +212,10 @@ export const getOrdersByUser = async (userId: string): Promise<Order[]> => {
   const client = getSupabase();
   if (!client) return [];
 
+  const selectQuery = `*, ${TABLES.order_items}(*)`;
   const { data, error } = await client
-    .from('orders')
-    .select('*, order_items(*)')
+    .from(TABLES.orders)
+    .select(selectQuery)
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -215,7 +223,7 @@ export const getOrdersByUser = async (userId: string): Promise<Order[]> => {
     console.error('getOrdersByUser error:', error);
     return [];
   }
-  return (data || []) as Order[];
+  return (data || []) as unknown as Order[];
 };
 
 export default getSupabase;
