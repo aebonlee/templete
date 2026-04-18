@@ -121,15 +121,6 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       });
     }, 5000);
 
-
-  // 10분 무동작 세션 타임아웃
-  useIdleTimeout({
-    enabled: isLoggedIn,
-    onTimeout: () => {
-      authSignOut().catch(() => {});
-    },
-  });
-
     return () => {
       clearTimeout(fallbackTimer);
       subscription.unsubscribe();
@@ -154,6 +145,15 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   ].filter((e): e is string => Boolean(e)).map((e) => e.toLowerCase());
   const isAdmin = allEmails.some((e) => ADMIN_EMAILS.includes(e));
   const isLoggedIn = !!user;
+
+
+  // 10분 무동작 세션 타임아웃
+  useIdleTimeout({
+  enabled: isLoggedIn,
+  onTimeout: () => {
+  authSignOut().catch(() => {});
+  },
+  });
 
   return (
     <AuthContext.Provider value={{
