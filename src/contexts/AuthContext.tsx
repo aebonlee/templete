@@ -6,6 +6,8 @@ import { ADMIN_EMAILS } from '../config/admin';
 import type { UserProfile, AccountBlock } from '../types';
 import { useIdleTimeout } from '../hooks/useIdleTimeout';
 import ProfileCompleteModal from '../components/ProfileCompleteModal';
+import PaymentNudgePopup from '../components/PaymentNudgePopup';
+import site from '../config/site';
 
 interface AuthContextValue {
   user: User | null;
@@ -194,6 +196,9 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       {children}
       {needsProfileCompletion && (
         <ProfileCompleteModal user={user!} onComplete={refreshProfile} />
+      )}
+      {isLoggedIn && user && !needsProfileCompletion && (
+        <PaymentNudgePopup user={user} siteSlug={site.id} />
       )}
     </AuthContext.Provider>
   );
