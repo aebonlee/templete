@@ -171,17 +171,19 @@ export const translations: Record<string, Record<string, unknown>> = {
     },
 
     // ─── 사이트 전용 키 ───
+    // 새 사이트 생성 시 아래 값들을 수정하세요
     site: {
       nav: {
-        books: '도서',
-        itBooks: 'IT 도서',
-        eduBooks: '교육 교재'
+        // 메뉴 라벨 추가 예시:
+        // main: '메인 메뉴',
+        // sub1: '서브 메뉴 1',
+        // sub2: '서브 메뉴 2'
       },
       home: {
-        title: 'DreamIT Books',
-        subtitle: 'IT 전문 도서와 교육 교재를 만나보세요',
-        welcome: '드림아이티 출판사에 오신 것을 환영합니다.',
-        description: 'IT 전문 서적, 교육 교재, 전자출판물을 기획·제작·유통하고 있습니다.'
+        title: 'DreamIT',                          // ← 사이트 영문명
+        subtitle: '사이트 한 줄 설명을 입력하세요',     // ← page-header 부제목
+        welcome: '환영합니다!',                       // ← 본문 제목
+        description: '사이트 소개 텍스트를 입력하세요.'  // ← 본문 설명
       }
     }
   },
@@ -360,15 +362,16 @@ export const translations: Record<string, Record<string, unknown>> = {
     // ─── Site-specific keys ───
     site: {
       nav: {
-        books: 'Books',
-        itBooks: 'IT Books',
-        eduBooks: 'Education Materials'
+        // Add menu labels here:
+        // main: 'Main Menu',
+        // sub1: 'Sub Menu 1',
+        // sub2: 'Sub Menu 2'
       },
       home: {
-        title: 'DreamIT Books',
-        subtitle: 'Discover IT books and educational materials',
-        welcome: 'Welcome to DreamIT Books.',
-        description: 'We plan, produce, and distribute IT books, educational materials, and e-publications.'
+        title: 'DreamIT',
+        subtitle: 'Enter your site description here',
+        welcome: 'Welcome!',
+        description: 'Enter your site introduction text here.'
       }
     }
   }
