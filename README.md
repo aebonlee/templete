@@ -115,10 +115,127 @@ npm run build
 
 # 빌드 미리보기
 npm run preview
+
+# GitHub Pages 배포
+npm run deploy
 ```
 
 빌드 결과물은 `dist/` 디렉토리에 생성됩니다.
 
+---
+
+## 2026-04-30 템플릿 업그레이드 v5.1
+
+### 1. 콘텐츠 영역 위치 수정 (base.css)
+
+fixed navbar(80px)로 인해 내부 페이지의 page-header 콘텐츠가 가려지는 문제를 수정했습니다.
+
+- `.page-header` 기본 스타일 추가 — `padding-top: calc(var(--nav-height) + 60px)`
+- `.page-title`, `.page-description` 스타일 정의
+- 기존 responsive.css의 768px/480px 모바일 오버라이드와 호환
+
+```css
+.page-header {
+    background: var(--hero-bg);
+    padding: calc(var(--nav-height) + 60px) 0 60px;
+    text-align: center;
+    color: var(--text-white);
+}
+```
+
+### 2. 다크모드 토글 버튼 가시성 개선 (dark-mode.css)
+
+다크모드에서 Navbar의 테마 전환/컬러 피커/검색 버튼이 보이지 않던 문제를 수정했습니다.
+
+- `.theme-toggle`, `.color-picker-btn`, `.nav-search-btn` 테두리 → `rgba(255,255,255,0.2)`
+- SVG 아이콘 색상 → `#D1D5DB` (밝은 회색)
+- hover 시 `var(--primary-blue-light)` 색상 강조
+- 컬러 피커 툴팁 배경/화살표 → `#1F2937` (다크 그레이)
+- `.lang-switcher`, `.cart-icon-link` 다크모드 가시성 추가
+- `.color-dot.active` 다크모드 테두리/그림자 수정
+
+### 3. site.ts 기본 설정 개선
+
+새 사이트 생성 시간을 단축하기 위해 site.ts를 개선했습니다.
+
+- 상단에 **수정 체크리스트** 주석 (8개 필수 + 수정 불필요 항목)
+- Books 전용 데이터 → 제네릭 플레이스홀더
+- menuItems 최소 구성(홈만) + 드롭다운 예시 주석
+- 회사 정보/색상/부모 사이트 = "수정 불필요" 명시
+- `.env.example` 실제 Supabase/PortOne 정보 가이드 추가
+- `index.html` OG/SEO 메타에 `[수정]` 주석 표시
+
+### 4. OG 이미지 생성 스크립트
+
+`scripts/generate-og-image.mjs` — 소셜 미디어 공유용 OG 이미지(1200x630px) 자동 생성
+
+```bash
+# 사전 설치 (1회)
+npm i -D sharp
+
+# 이미지 생성
+npm run og-image
+```
+
+- CONFIG 객체의 `siteName`, `siteNameKo`, `tagline`, `primaryColor`만 수정
+- SVG → PNG 변환 (sharp 라이브러리)
+- 출력: `public/og-image.png`
+
+### 5. 알림 인프라 (utils/notifications.ts)
+
+모든 DreamIT 사이트에서 공용으로 사용하는 이메일/SMS 발송 유틸리티
+
+```typescript
+import { sendEmail, sendSMS, sendBoth } from '../utils/notifications';
+
+// 이메일 (Resend API — noreply@dreamitbiz.com)
+await sendEmail({ to: 'user@example.com', subject: '제목', html: '<p>내용</p>' });
+
+// SMS (icode TCP — 90바이트 초과 시 LMS 자동 전환)
+await sendSMS({ receiver: '01012345678', message: '안녕하세요' });
+
+// 동시 발송
+await sendBoth({ email: {...}, sms: {...} });
+```
+
+- `buildEmailHtml()` 브랜드 이메일 템플릿 헬퍼
+- Supabase Edge Functions 호출 (별도 백엔드 불필요)
+
+---
+
+## 프로젝트 구조
+
+```
+templete-ref/
+├── public/           CNAME, favicon.svg, og-image.png, robots.txt, 404.html
+├── scripts/          generate-og-image.mjs
+├── src/
+│   ├── config/       site.ts (사이트 설정)
+│   ├── components/   Navbar, Footer, AuthGuard, SearchModal, SEOHead 등
+│   ├── contexts/     Auth, Cart, Language, Theme, Toast
+│   ├── hooks/        useAOS, useMediaQuery, useToast
+│   ├── layouts/      PublicLayout.tsx (라우팅)
+│   ├── pages/        Home, Login, Register, Cart, Checkout 등
+│   ├── styles/       base, navbar, hero, footer, auth, shop, dark-mode, responsive 등
+│   ├── types/        TypeScript 타입 정의
+│   └── utils/        auth, supabase, notifications, translations
+├── .env.example
+├── index.html
+├── package.json
+└── vite.config.ts
+```
+
+## 색상 테마 (5색)
+
+| 이름 | 기본 | 다크 | 밝은 |
+|------|------|------|------|
+| blue (기본) | `#0046C8` | `#002E8A` | `#4A8FE7` |
+| red | `#C8102E` | `#8A001A` | `#E74A5A` |
+| green | `#00855A` | `#005C3E` | `#4AE79A` |
+| purple | `#8B1AC8` | `#5E008A` | `#B04AE7` |
+| orange | `#C87200` | `#8A4E00` | `#E7A04A` |
+
+---
 
 ## License / 라이선스
 
